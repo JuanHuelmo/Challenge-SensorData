@@ -1,0 +1,136 @@
+﻿@model Challenge.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div id="login" class="container " data-scrollview="true">
+    <div class="carousel-inner text-center">
+
+        <form class="form-horizontal text-center " id="FormLogin">
+            <div class="col-lg-4">
+                <span id="Mensaje2" class="text-danger"></span>
+            </div>
+
+            <div class="form-group row ">
+                <div class="col-lg-4">
+                    <span id="Mensaje" class="text-danger"></span>
+                </div>
+                <div class="col-lg-4">
+                    <span id="Mensaje2" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row ">
+
+                <label class="col-form-label col-md-3 text-sm-center">Email - UserName <span class="text-primary">*</span></label>
+                <div class="col-lg-4">
+                    <input asp-for="EmailUserName" type="text" class="form-control" id="EmailUserName" />
+                    <span asp-validation-for="EmailUserName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row ">
+                <label class="col-form-label col-md-3 text-sm-center">Contraseña <span class="text-primary">*</span></label>
+                <div class="col-lg-4">
+                    <input asp-for="Password" type="password" class="form-control" id="Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row ">
+                <label class="col-form-label col-md-3 text-md-center"></label>
+                <div class="col-lg-4 text-left">
+
+                    <img id="AjaxLoader" alt="Enviando ..." style="display:none; width:10px;height: 10px" src="~/img/loading-gif.gif" />
+                    &nbsp;&nbsp;
+                    <button type="submit" id="Submit" class="btn btn-theme btn-primary btn-block">Login</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    </div>
+
+
+
+    @section scripts{
+
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+        <script type="text/javascript">
+    window.onload = function () {
+        $("#menu").css("display", "none");
+    };
+
+     function mensaje() {
+         $("#Mensaje").text("Ingrese todos los datos necesarios.");
+         $("#Mensaje").show("slow").delay(2000).hide("slow");
+    };
+
+        $(function () {
+            $("#FormLogin").submit(function (e) {
+                e.preventDefault();
+
+                var email = $("#EmailUserName").val();
+                var Password = $("#Password").val();
+
+                if (email != "" && Password != "") {
+                    $("#AjaxLoader").show("fast");
+
+
+                    $("#Submit").prop("disabled", true);
+
+                    $.ajax({
+                        url: "@Url.Action("Login", "Home")",
+                        data: {
+
+                            EmailUserName: email,
+                            Password: Password,
+
+                        },
+                        type: "post"
+                    })
+                        .done(function (result) {
+                            if (result != null) {
+                                window.location.replace(result.newUrl);
+
+
+                            } else {
+                                $("#AjaxLoader").hide("slow");
+                                $("#Submit").prop("disabled", false);
+                                $("#Mensaje2").text("Vuelve a ingresar un email/Nombre de usuario y contraseña valido");
+                                $("#Mensaje2").show("slow").delay(2000).hide("slow");
+                            }
+                        })
+                       
+                        .fail(function (xhr, status, error) {
+
+                            $("#Mensaje2").text("Ingresar Usuario y contraseña correctamente");
+                            $("#Mensaje2").show("slow").delay(5000).hide("slow");
+
+                           
+                            $("#AjaxLoader").hide("slow");
+
+                            $("#Submit").prop("disabled", false);
+                        })
+                  
+                        .always(function () {
+                            $("#Submit").prop("disabled", false);
+                        });
+
+
+                } else {
+
+
+
+                    mensaje();
+
+                }
+
+
+            });
+        });
+
+
+        </script>
+    }

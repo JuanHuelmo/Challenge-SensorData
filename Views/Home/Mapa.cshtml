@@ -1,0 +1,202 @@
+﻿
+
+
+
+<div id="mapa" class="container " data-animation="true">
+
+
+    <div id="map" class="map">
+
+        <div id="popup" class="ol-popup">
+            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+            <div id="popup-content"></div>
+
+        </div>
+
+    </div>
+    <div class="carousel-inner text-center">
+        <button id="botonAlta" type="button" class="btn btn-primary btn-lg botonMarcador">
+            Mostrar Marcadores
+        </button>
+    </div>
+
+</div>
+
+
+
+
+
+    @section scripts{
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+        <style>
+            .map {
+                height: 400px;
+                width: 100%;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+        <script type="text/javascript">
+
+
+
+            var map = new ol.Map({
+                target: 'map',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    })
+                ],
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([4.35247, 50.84673]),
+                    maxZoom: 18,
+                    zoom: 12
+                })
+            });
+
+
+     //        var layer = new ol.layer.Vector({
+     //source: new ol.source.Vector({
+     //    features: [
+     //        new ol.Feature({
+     //            geometry: new ol.geom.Point(ol.proj.fromLonLat([4.35247, 50.84673]))
+     //        })
+     //                ]
+     //            })
+     //        });
+     //        map.addLayer(layer);
+
+
+
+            let latitud = 4.35247;
+            let longitud = 50.84673;
+
+
+            let marcador1 = new ol.Feature({
+                name: "chau",
+                geometry: new ol.geom.Point(
+                    ol.proj.fromLonLat([latitud
+                        ,longitud ])// En dónde se va a ubicar
+                ),
+            });
+
+
+
+            let latitud2 = 4.35100;
+            let longitud2 = 50.81500;
+
+
+            let marcador2 = new ol.Feature({
+                name: "hola",
+                geometry: new ol.geom.Point(
+                    ol.proj.fromLonLat([latitud2
+                        , longitud2])// En dónde se va a ubicar
+                ),
+            });
+
+
+            let latitud3 = 4.31100;
+            let longitud3 = 50.85500;
+
+
+            let marcador3 = new ol.Feature({
+                name: "323",
+                geometry: new ol.geom.Point(
+                    ol.proj.fromLonLat([latitud3
+                        , longitud3])// En dónde se va a ubicar
+                ),
+            });
+
+
+
+            // Agregamos icono
+            marcador1.setStyle(new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: "@Url.Content("~/img/img.png")" })
+            }));
+
+              marcador2.setStyle(new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: "@Url.Content("~/img/img.png")" })
+              }));
+
+             marcador3.setStyle(new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: "@Url.Content("~/img/img.png")" })
+            }));
+
+            // marcadores debe ser un arreglo
+            const marcadores = []; // Arreglo para que se puedan agregar otros más tarde
+
+
+            marcadores.push(marcador1);// Agregamos el marcador al arreglo
+            marcadores.push(marcador2);
+            marcadores.push(marcador3);
+
+
+            let capa = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: marcadores, // A la capa le ponemos los marcadores
+                }),
+            });
+            // Y agregamos la capa al mapa
+
+           
+
+
+            var element = document.getElementById('popup');
+
+
+
+            var popup = new ol.Overlay({
+                element: element,
+                positioning: 'bottom-center',
+                stopEvent: false,
+                offset: [0, -50],
+            });
+
+            map.addOverlay(popup);
+
+            // display popup on click
+            map.on('click', function (evt) {
+                // recardo el popover para limpiar los datos 
+                $(element).popover('dispose');
+
+                //acciones
+                var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+                    return feature;
+                });
+                if (feature) {
+                    
+                  
+                    var coordinates = feature.getGeometry().getCoordinates();
+                    
+                    popup.setPosition(coordinates);
+                    
+                    $(element).popover({
+                        placement: 'top',
+                        html: true,
+                        content: ` Latitud ${coordinates[0]} <br/> Longitud ${coordinates[1]}`,
+
+                    });
+                    
+                    console.log(element);
+                    console.log(element);
+                    $(element).popover('show');
+                } else {
+                    $(element).popover('dispose');
+                }
+            });
+
+
+      
+
+            
+
+
+            $(document).on("click", ".botonMarcador", function () {
+                map.addLayer(capa);
+         
+            });
+
+        </script>
+    }

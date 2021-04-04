@@ -1,0 +1,716 @@
+﻿@using Challenge.ViewModels;
+@model Challenge.ViewModels.ABMUsuarioViewModel
+@{
+    ViewBag.Title = "Title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@{
+
+
+}
+
+<div id="ABMcliente" class="container " data-animation="true">
+
+    <div class="row">
+        <div class="carousel-inner text-center">
+            <h2 class="content-title">ABM Usuario</h2>
+
+        </div>
+
+
+
+
+
+    </div>
+    <div class="col-lg-4">
+        <span id="Mensaje2" class="text-danger"></span>
+    </div>
+    @if (Model.Usuarios != null)
+    {
+        <div class="container">
+
+            <table id="Tabla" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                        <th>Nombre de usuario</th>
+                        <th>Cliente</th>
+                        <th>Modificar</th>
+                        <th>Baja</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (Usuario usuario in Model.Usuarios)
+                    {
+                        <tr>
+                            <td>@usuario.Nombre</td>
+                            <td>@usuario.Descripcion</td>
+                            <td>@usuario.UserName</td>
+                            @if (usuario.Cliente != null)
+                            {
+                                <td>@usuario.Cliente.RazonSocial</td>
+                            }
+                            else
+                            {
+                                <td>Sin Cliente</td>
+                            }
+
+                            <td>
+                                <input type="button" id="@usuario.Id" class="buttonModifUsuario btn btn-primary" value="Modificar" />
+                            </td>
+
+                            <td>
+                                <input type="button" id="@usuario.Id" class="buttonElimUsuario btn btn-primary" value="Eliminar" />
+                            </td>
+                        </tr>
+                    }
+
+
+
+                </tbody>
+
+
+            </table>
+        </div>
+
+    }
+    else
+    {
+        <h4> No tienes permiso para ver Listado Usuarios</h4>
+    }
+
+
+</div>
+<div class="carousel-inner text-center">
+    <button id="botonAlta" type="button" class="btn btn-primary btn-lg botonalta" data-toggle="modal" data-target="#AltaUsuarioModal">
+        Alta
+    </button>
+</div>
+
+<button style="visibility:hidden;" id="botonEliminar" type="button" class="btn btn-primary btn-lg botonalta" data-toggle="modal" data-target="#deleteUsuarioModal">
+    Eliminar
+</button>
+
+
+
+<button style="visibility:hidden;" id="botonModificacionUsuario" type="button" class="btn btn-primary btn-lg botonalta" data-toggle="modal" data-target="#ModificacionUsuarioModal">
+    Modificar
+</button>
+
+
+<div id="AltaUsuarioModal" class="modal fade">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content ">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Alta Usuario</h4>
+                <button type="button" class="close" data-dismiss="modal" id="cerrarAltaUsuario" aria-hidden="true">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Permisos</label>
+                <select name="Permisos1" id="Permisos1">
+                    <option value="-1">Seleccione un permiso</option>
+                    @foreach (Permiso per in Model.Permisos)
+                    {
+                        <option value="@per.Name">@per.Name</option>
+                    }
+                </select>
+                <button id="permisoAddMod" class="buttonAgregarPermiso"> Agregar Permiso</button>
+
+                <table id="tablaPermisosMod" class="display" style="width:30%">
+                    <thead>
+                        <tr>
+                            <th>Permisos Asignados</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="bodyPermisos">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-body">
+                <form id="AltaUsuario">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input id="Nombre1" type="text" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Descripcion</label>
+                            <input id="Descripcion1" type="text" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Nombre Usuario</label>
+                            <input id="NombreUsuario1" type="text" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input id="Email1" type="email" class="form-control" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input id="Password1" type="password" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Cliente</label>
+                            <select Name="Cliente1" id="Cliente1">
+
+                                <option value="-1">Elija un Cliente</option>
+                                @foreach (Cliente cli in Model.Clientes)
+                                {
+                                    <option value="@cli.id">@cli.RazonSocial</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="button" id="botonCancelar" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                            <input type="submit" id="botonAltaUsuario" class="close btn btn-info" value="Crear">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+<div id="ModificacionUsuarioModal" class="modal fade">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content ">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Editar Usuario</h4>
+                <button type="button" class="close" data-dismiss="modal" id="cerrarAltaUsuario" aria-hidden="true">&times;</button>
+            </div>
+            <input type="hidden" id="idUsuario" />
+            <div class="form-group">
+                <label>Permisos</label>
+                <select name="Permisos" id="Permisos">
+                    <option value="-1">Seleccione un permiso</option>
+                    @foreach (Permiso per in Model.Permisos)
+                    {
+                        <option value="@per.Name">@per.Name</option>
+                    }
+                </select>
+                <button id="permisoAdd" class="buttonAgregarPermisoMod"> Agregar Permiso</button>
+                <div class="container">
+
+
+                    <table id="tablaPermisos1" class="display" style="width:50%">
+                        <thead>
+                            <tr>
+                                <th>Permisos Asignados</th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="bodyPermisos1">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="ModificacionUsuario">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input id="Nombre" type="text" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Descripcion</label>
+                            <input id="Descripcion" type="text" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Nombre Usuario</label>
+                            <input id="NombreUsuario" type="text" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input id="Email" type="email" class="form-control" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input id="Password" type="password" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Cliente</label>
+                            <select Name="Cliente" id="Cliente">
+
+                                <option value="-1">Elija un Cliente</option>
+                                @foreach (Cliente cli in Model.Clientes)
+                                {
+                                    <option value="@cli.id">@cli.RazonSocial</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="button" id="botonCancelar" class="btn btn-default close" data-dismiss="modal" value="Cancelar">
+                            <input type="submit" id="botonModificarUsuario" class="btn btn-info" value="Guardar">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+<div id="deleteUsuarioModal" class="modal fade">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content ">
+            <form id="EliminarUsuario">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cliente</h4>
+                    <button type="button" class="close" data-dismiss="modal" id="cerrarEliminarUsuario" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h3> Eliminar Usuario</h3>
+
+                        <input type="hidden" id="idUsuarioEliminar" />
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="button" id="botonCancelar" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                    <input type="submit" id="boton" class="btn btn-info" value="Eliminar">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section scripts {
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+
+        var permisos = [];
+        var permisosMod = [];
+
+        $(document).ready(function () {
+
+
+
+            $('#Tabla').DataTable();
+            $('#tablaPermisos1').DataTable({
+                "searching": false,
+                  "language": {
+                    "emptyTable": "-"
+                }
+
+            });
+
+
+
+
+
+            $(document).on("click", ".botonalta", function () {
+                permisos = [];
+
+            });
+
+
+            $(document).on("click", ".close", function () {
+                permisos = [];
+                permisosMod = [];
+                $("#bodyPermisos1").empty();
+                $("#bodyPermisos").empty();
+            });
+
+
+
+        // boton modificar busca los datos para cargar en el modal
+            $(document).on("click", ".buttonModifUsuario", function () {
+
+                     $.ajax({
+                url: "@Url.Action("GetUsuario", "Usuario")",
+                data: {
+
+                    id: this.id,
+                    eliminar: false,
+                },
+                type: "get"
+                     }).done(function (result) {
+                         if (result != null) {
+                             console.log(result);
+
+                             var PermisosUsuario = [];
+                             $("#idUsuario").val(result.id);
+                             $("#Nombre").val(result.nombre);
+                             $("#Descripcion").val(result.descripcion);
+                             $("#Email").val(result.email);
+                             $("#NombreUsuario").val(result.nombreUsuario);
+                             $("#Password").val(result.password);
+                             $("#Cliente").val(result.clienteId);
+                             PermisosUsuario = result.permisosString;
+
+                             permisosMod = [];
+
+                             permisosMod = PermisosUsuario;
+
+
+
+
+
+                             setTimeout(function () {
+
+                                 $('#botonModificacionUsuario').trigger('click');
+
+                             }, 1000);
+
+                             
+                             permisosMod.forEach(valor => {
+                                 console.log(valor);
+                                 $("#bodyPermisos1").append(`<tr id=${valor}><td >` + valor + "</td>" +
+                                     `<td><button id="${valor}" class="buttonEliminarPermisoMod"> Eliminar</button></td>`
+                                     + "</tr > ");}
+
+                             );
+
+                         }
+                     }).fail(function (xhr, status, error) {
+
+                         setTimeout(function () {
+                             $('#botonCancelar').trigger('click');
+                         }, 2000);
+                         $("#editClienteModal").hide("slow");
+                         $("#Mensaje2").text("No tienes permiso para Modificar Clientes");
+                         $("#Mensaje2").show("slow").delay(5000).hide("slow");
+                     });
+
+
+            });
+
+
+
+
+
+
+
+            $(document).on("click", ".buttonEliminarPermiso", function () {
+
+                removeA(permisos, this.id);
+                $(this).closest('tr').remove();
+            });
+
+
+
+
+            $(document).on("click", ".buttonAgregarPermiso", function () {
+
+                var valor = $("#Permisos1").val();
+                var existe = permisos.find(elem => elem == valor);
+                console.log(existe);
+                if (existe == undefined && valor != "-1") {
+                    permisos.push(valor);
+                    $("#bodyPermisos").append(`<tr id=${valor}><td >` + valor + "</td>"+
+                        `<td><button id="${valor}" class="buttonEliminarPermiso"> Eliminar</button></td>`
+                       + "</tr > ");
+                }
+
+
+            });
+
+
+
+            $(document).on("click", ".buttonEliminarPermisoMod", function () {
+
+                // logica para buscar usuario
+
+
+
+
+                removeA(permisosMod, this.id);
+
+
+                $(this).closest('tr').remove();
+            });
+
+
+
+            // remover valor de array
+            function removeA(arr) {
+                var what, a = arguments, L = a.length, ax;
+                while (L > 1 && arr.length) {
+                    what = a[--L];
+                    while ((ax = arr.indexOf(what)) !== -1) {
+                        arr.splice(ax, 1);
+                    }
+                }
+                return arr;
+            }
+
+
+            $(document).on("click", ".buttonAgregarPermisoMod", function () {
+
+                var valor = $("#Permisos").val();
+              
+                var existe = permisosMod.find(elem => elem == valor);
+              
+                if (existe == undefined && valor != "-1") {
+                    permisosMod.push(valor);
+                    $("#bodyPermisos1").append(`<tr id=${valor}><td >` + valor + "</td>" +
+                        `<td><button id="${valor}" class="buttonEliminarPermisoMod"> Eliminar</button></td>`
+                        + "</tr > ");
+                }
+
+
+            });
+
+
+
+        });
+
+
+         $(function () {
+            $("#AltaUsuario").submit(function (e) {
+
+                e.preventDefault();
+
+
+
+                var Nombre = $("#Nombre1").val();
+                var Descripcion = $("#Descripcion1").val();
+                var UserName = $("#NombreUsuario1").val();
+                var Password = $("#Password1").val();
+                var ClienteId = $("#Cliente1").val();
+                var Email = $("#Email1").val();
+
+
+                $.ajax({
+                    url: "@Url.Action("Alta", "Usuario")",
+                    data: {
+
+                     usuario: {
+                        Nombre: Nombre,
+                        Descripcion: Descripcion,
+                            UserName: UserName,
+                        Email: Email,
+                        Password: Password,
+
+                        //PermisosString: permisos,
+                        },
+                        Permisos: permisos,
+                        ClienteId: ClienteId,
+                        },
+                        type: "POST"
+                }).done(function (result) {
+
+                    if (result != null) {
+                        console.log(result);
+                        if (result.mensaje == "Alta Exitosa" || result.mensaje == "No tienes permiso para dar de Alta") {
+
+                            setTimeout(function () {
+                                $('#botonCancelar').trigger('click');
+                            }, 5000);
+                            $("#editClienteModal").hide("slow");
+                            if ($('.modal-backdrop').is(':visible')) {
+                                permisos = [];
+                                $('.modal-backdrop').hide("slow");
+                                window.location.reload(true);
+                                swal(result.mensaje);
+                            }
+                        }
+                        else {
+                            
+                            swal(result.mensaje);
+                        }
+
+                    } else {
+                        swal(result.mensaje);
+                    }
+                });
+             });
+
+         });
+
+
+
+
+
+                 $(function () {
+            $("#ModificacionUsuario").submit(function (e) {
+
+                e.preventDefault();
+
+
+
+
+                var id = $("#idUsuario").val();
+                var Nombre = $("#Nombre").val();
+                var Descripcion = $("#Descripcion").val();
+                var UserName = $("#NombreUsuario").val();
+                var Password = $("#Password").val();
+                var ClienteId = $("#Cliente").val();
+                var Email = $("#Email").val();
+
+
+                $.ajax({
+                    url: "@Url.Action("Modificacion", "Usuario")",
+                    data: {
+
+                        usuario: {
+                            Id: id,
+                        Nombre: Nombre,
+                        Descripcion: Descripcion,
+                            UserName: UserName,
+                        Email: Email,
+                        Password: Password,
+
+                        //PermisosString: permisos,
+                        },
+                        Permisos: permisosMod,
+                        ClienteId: ClienteId,
+                        },
+                        type: "POST"
+                }).done(function (result) {
+                    alert("hola");
+                    if (result != null) {
+                        console.log(result);
+                        if (result.mensaje == "Modificacion Exitosa" || result.mensaje == "No tienes permiso para Modificar") {
+
+                            setTimeout(function () {
+                                $('#botonCancelar').trigger('click');
+                            }, 5000);
+                            $("#editClienteModal").hide("slow");
+                            if ($('.modal-backdrop').is(':visible')) {
+                                permisosMod = [];
+                                $('.modal-backdrop').hide("slow");
+                                window.location.reload(true);
+                                swal(result.mensaje);
+                            }
+                        }
+                        else {
+                            swal(result.mensaje);
+                        }
+
+                    } else {
+                        swal(result.mensaje);
+                    }
+                });
+             });
+
+         });
+
+
+
+
+
+
+
+            //////////////////Eliminar Usuario
+
+
+
+            $(document).on("click", ".buttonElimUsuario", function () {
+
+                $.ajax({
+                    url: "@Url.Action("GetUsuario", "Usuario")",
+                    data: {
+
+                        id: this.id,
+                        eliminar: true,
+                    },
+                    type: "get"
+                })// Se ejecuta si todo fue bien.
+                    .done(function (result) {
+                        if (result != null) {
+                            console.log(result);
+                            $("#idUsuarioEliminar").val(result.id);
+
+                            swal("Eliminado");
+                            setTimeout(function () {
+
+                                $('#botonEliminar').trigger('click');
+
+                            }, 1000);
+
+                        }
+                    }).fail(function (xhr, status, error) {
+
+                        setTimeout(function () {
+                            $('#botonCancelar').trigger('click');
+                        }, 2000);
+                        $("#editClienteModal").hide("slow");
+                        $("#Mensaje2").text("No tienes permiso para Eliminar Clientes");
+                        $("#Mensaje2").show("slow").delay(5000).hide("slow");
+                    });
+
+            });
+
+
+
+            $(function () {
+                $("#EliminarUsuario").submit(function (e) {
+                    e.preventDefault();
+
+                    var id = $("#idUsuarioEliminar").val();
+
+
+
+
+                    $.ajax({
+                        url: "@Url.Action("EliminarUsuario", "Usuario")",
+                        data: {
+
+                            id,
+
+                        },
+                        type: "GET"
+                    })
+
+                        // Se ejecuta si todo fue bien.
+                        .done(function (result) {
+                            if (result != null) {
+                                setTimeout(function () {
+                                    $('#botonCancelar').trigger('click');
+                                }, 5000);
+                                $("#editClienteModal").hide("slow");
+                            };
+
+                                window.location.reload(true);
+
+                            swal(result.mensaje);
+                        }).fail(function (xhr, status, error) {
+                            swal("Error al eliminar");
+                        });
+
+
+
+                });
+
+
+            }
+    );
+
+
+
+
+
+    </script>
+}
