@@ -4,7 +4,7 @@ Instrucciones de uso:
 usuarios y casos de prueba
 se puede loguear con Email o con UserName
 
-Los datos estan en el script SQLExpress
+Los datos estan en el script SQLExpress ubicado en la carpeta ScriptBaseDeDatos
 
 __________________________
 UserName--- Password---Permisos
