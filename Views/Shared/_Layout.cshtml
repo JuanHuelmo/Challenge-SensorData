@@ -13,10 +13,8 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <link href="~/assets/css/one-page-parallax/app.min.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
-
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-    <script src="../assets/plugins/pace/pace.min.js"></script>
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+   
 </head>
 <body data-spy="scroll" data-target="#header" data-offset="51">
 
@@ -28,12 +26,12 @@
             <!-- begin container -->
             <div class="container">
                 <!-- begin navbar-brand -->
-              
-                    <span class="brand-logo"></span>
-                    <span class="brand-text">
-                        <span class="text-primary">Challenge</span> 
-                    </span>
-                
+
+                <span class="brand-logo"></span>
+                <span class="brand-text">
+                    <span class="text-primary">Challenge</span>
+                </span>
+
                 <!-- end navbar-brand -->
                 <!-- begin navbar-toggle -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header-navbar">
@@ -44,7 +42,7 @@
                 </button>
                 <!-- end navbar-header -->
                 <!-- begin navbar-collapse -->
-                @if (Context.Session.GetInt32("IdUsuario") != 0  && Context.Session.GetInt32("IdUsuario") != null)
+                @if (Context.Session.GetInt32("IdUsuario") != 0 && Context.Session.GetInt32("IdUsuario") != null)
                 {
                     <div style="display:none" class="collapse navbar-collapse" id="menu">
                         <ul class="nav navbar-nav navbar-right navbar-dark">
@@ -63,45 +61,47 @@
         </div>
         <!-- end #header -->
         @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Challenge</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Challenge</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>*@
-    <div id="home" class="content">
+            </nav>*@
+        <div id="home" class="content">
 
-        @RenderBody()
-    </div>
+            @RenderBody()
         </div>
+    </div>
 
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-      
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="/assets/js/one-page-parallax/app.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../assets/plugins/pace/pace.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/select2.min.js"></script>
 
 
-        <script src="/assets/js/one-page-parallax/app.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                App.init();
-            });
-        </script>
-        @RenderSection("Scripts", required: false)
-        @RenderSection("Styles", required: false)
+    <script>
+        $(document).ready(function () {
+            App.init();
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+    @RenderSection("Styles", required: false)
 </body>
 </html>

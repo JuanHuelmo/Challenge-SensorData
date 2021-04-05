@@ -112,14 +112,14 @@
             </div>
             <div class="form-group">
                 <label>Permisos</label>
-                <select name="Permisos1" id="Permisos1">
+                <select name="Permisos1" id="Permisos1" class="js-example-basic-single" >
                     <option value="-1">Seleccione un permiso</option>
                     @foreach (Permiso per in Model.Permisos)
                     {
                         <option value="@per.Name">@per.Name</option>
                     }
                 </select>
-                <button id="permisoAddMod" class="buttonAgregarPermiso"> Agregar Permiso</button>
+                <button id="permisoAddMod" class="buttonAgregarPermiso btn"> Agregar Permiso</button>
 
                 <table id="tablaPermisosMod" class="display" style="width:30%">
                     <thead>
@@ -158,7 +158,7 @@
                         </div>
                         <div class="form-group">
                             <label>Cliente</label>
-                            <select Name="Cliente1" id="Cliente1">
+                            <select Name="Cliente1" id="Cliente1" class="js-example-basic-single">
 
                                 <option value="-1">Elija un Cliente</option>
                                 @foreach (Cliente cli in Model.Clientes)
@@ -195,14 +195,14 @@
             <input type="hidden" id="idUsuario" />
             <div class="form-group">
                 <label>Permisos</label>
-                <select name="Permisos" id="Permisos">
+                <select name="Permisos" id="Permisos" class="js-example-basic-single">
                     <option value="-1">Seleccione un permiso</option>
                     @foreach (Permiso per in Model.Permisos)
                     {
                         <option value="@per.Name">@per.Name</option>
                     }
                 </select>
-                <button id="permisoAdd" class="buttonAgregarPermisoMod"> Agregar Permiso</button>
+                <button id="permisoAdd" class="buttonAgregarPermisoMod btn"> Agregar Permiso</button>
                 <div class="container">
 
 
@@ -246,7 +246,7 @@
                         </div>
                         <div class="form-group">
                             <label>Cliente</label>
-                            <select Name="Cliente" id="Cliente">
+                            <select Name="Cliente" id="Cliente" class="js-example-basic-single">
 
                                 <option value="-1">Elija un Cliente</option>
                                 @foreach (Cliente cli in Model.Clientes)
@@ -312,9 +312,11 @@
         var permisos = [];
         var permisosMod = [];
 
+      
+
         $(document).ready(function () {
-
-
+                 $('.js-example-basic-single').select2();
+            
 
             $('#Tabla').DataTable();
             $('#tablaPermisos1').DataTable({
@@ -326,7 +328,7 @@
             });
 
 
-
+       
 
 
             $(document).on("click", ".botonalta", function () {
